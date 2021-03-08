@@ -10,6 +10,10 @@ import Select from "react-select";
 import Dropzone from "./Components/FormElements/Dropzone";
 import Radio from "./Components/FormElements/Radio";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+toast.configure();
 function App() {
   const [employeeForm, setEmployeeForm] = useState({
     firstName: "",
@@ -23,6 +27,7 @@ function App() {
     termsChecked: false,
     attachedFile: null,
   });
+
   const City = [
     { value: "", label: "Please Select City" },
     { value: "Ahmedabad", label: "Ahmedabad" },
@@ -31,12 +36,6 @@ function App() {
   ];
   const handleChange = (name, value) => {
     setEmployeeForm({ ...employeeForm, [name]: value });
-    console.log(employeeForm);
-  };
-
-  const handleClick = (event) => {
-    event.preventDefault();
-    console.log(employeeForm);
   };
 
   //React-select Hanlder
@@ -63,6 +62,23 @@ function App() {
     setEmployeeForm({ ...employeeForm, gender: value });
   };
 
+  const handleClick = (event) => {
+    event.preventDefault();
+    let flag = false;
+    for (let key in employeeForm) {
+      if (employeeForm[key] === null || employeeForm[key] === "") {
+        toast.warn("Please Enter All the Fields");
+        flag = false;
+        return;
+      } else {
+        flag = true;
+      }
+    }
+
+    if (flag) {
+      toast.info("Your employeement Form is Submitted");
+    }
+  };
   return (
     <div className="container">
       <h2>Employee Registration Form</h2>
